@@ -1,42 +1,41 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useAuth } from "@/components/auth-context"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { Background } from "@/components/background"
-import { Reveal } from "@/components/reveal"
+import type React from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/components/auth-context";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { Background } from "@/components/background";
+import { Reveal } from "@/components/reveal";
 
 export default function LoginPage() {
-  const { login } = useAuth()
-  const router = useRouter()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [err, setErr] = useState<string | null>(null)
+  const { login } = useAuth();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>("Login is currently disabled");
 
   const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErr(null)
-    setLoading(true)
+    e.preventDefault();
+    setErr("Login is currently disabled");
+    setLoading(true);
     try {
-      if (!email.trim()) throw new Error("Email required.")
-      await login(email, password)
-      router.push("/")
+      // This will always throw an error
+      await login(email, password);
+      router.push("/");
     } catch (e: any) {
-      setErr(e?.message || "Failed to log in.")
+      setErr(e?.message || "Login is currently disabled");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-dvh flex flex-col bg-black text-white">
@@ -77,14 +76,17 @@ export default function LoginPage() {
                   {err && <p className="text-sm text-red-300">{err}</p>}
                   <Button
                     type="submit"
-                    disabled={loading}
+                    disabled={true} // Always disabled
                     className="w-full bg-[#BBDEFB] text-black hover:bg-[#A7D3FA]"
                   >
-                    {loading ? "Signing in…" : "Log in"}
+                    Login Disabled
                   </Button>
                   <p className="text-xs text-neutral-400">
-                    Login is for approved accounts only. Need access?{" "}
-                    <Link href="/sign-up" className="text-[#BBDEFB] hover:text-white underline underline-offset-4">
+                    Login is currently unavailable. Need access?{" "}
+                    <Link
+                      href="/sign-up"
+                      className="text-[#BBDEFB] hover:text-white underline underline-offset-4"
+                    >
                       Request access
                     </Link>
                     .
@@ -97,5 +99,5 @@ export default function LoginPage() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }
